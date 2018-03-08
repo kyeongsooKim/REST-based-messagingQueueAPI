@@ -14,8 +14,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json()); //tells the system that you want json to be used.
 
 
+app.post('/listen', function (req, res) {
 
-function listen(keys, res) {
+  var keys = req.body.keys.toString().split(',');
   var amqp = require('amqplib/callback_api');
   amqp.connect('amqp://localhost', function (err, conn) {
     conn.createChannel(function (err, ch) {
@@ -37,13 +38,16 @@ function listen(keys, res) {
       });
     });
   });
-}
-
-app.post('/listen', function (req, res) {
-  listen(req.body.keys.toString().split(','), res);
 })
 
-function speak(key, msg) {
+
+
+app.post('/speak', function (req, res) {
+  res.sendStatus(200);
+
+  var key = req.body.key.toString();
+  var msg = req.body.msg.toString();
+
   var amqp = require('amqplib/callback_api');
 
   amqp.connect('amqp://localhost', function (err, conn) {
@@ -55,11 +59,7 @@ function speak(key, msg) {
       setTimeout(function() { conn.close();}, 500);
     });
   });
-}
 
-app.post('/speak', function (req, res) {
-  res.sendStatus(200);
-  speak(req.body.key.toString(), req.body.msg.toString());
 })
 
 module.exports = app;
