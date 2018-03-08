@@ -1,13 +1,19 @@
-// app.js
-var express = require('express');
-var path = require('path');
-var bodyParser = require('body-parser');
+//expressjs : framework to help organize your web application into an MVC architecture on the server side
+const express = require('express');
+
+/* body-parser extract the entire body portion of an incoming request stream and exposes it on req.body.
+   body-parser module parses the JSON, buffer, string and URL encoded data submitted using HTTP POST request. */
+const bodyParser = require('body-parser');
 
 //create express app
 var app = express();
 
-app.use(bodyParser.json());
+/* tells the system whether you want to use a simple algorithm for shallow parsing (i.e. false)
+or complex algorithm for deep parsing that can deal with nested objects (i.e. true). */
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json()); //tells the system that you want json to be used.
+
+
 
 function listen(keys, res) {
   var amqp = require('amqplib/callback_api');
@@ -22,8 +28,6 @@ function listen(keys, res) {
         });
 
         ch.consume(q.queue, function (msg) {
-          console.log(" [x] Consume %s: '%s'", msg.fields.routingKey, msg.content.toString());
-
           res.status(200).json({
             msg: msg.content.toString()
           });
@@ -36,7 +40,6 @@ function listen(keys, res) {
 }
 
 app.post('/listen', function (req, res) {
-  console.log("(/listen) Keys: " + req.body.keys);
   listen(req.body.keys.toString().split(','), res);
 })
 
@@ -46,9 +49,9 @@ function speak(key, msg) {
   amqp.connect('amqp://localhost', function (err, conn) {
     conn.createChannel(function (err, ch) {
       var ex = 'hw3';
-
       ch.publish(ex, key, new Buffer(msg));
-      console.log(" [x] Sent %s: '%s'", key, msg);
+
+      //for some reason, if we delete the line below, it doesn't work
       setTimeout(function() { conn.close();}, 500);
     });
   });
