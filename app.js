@@ -20,7 +20,7 @@ app.post('/listen', function (req, res) {
   var amqp = require('amqplib/callback_api');
   amqp.connect('amqp://localhost', function (err, conn) {
     conn.createChannel(function (err, ch) {
-      var exchange = 'hw3';
+      var exchange = 'kim';
 
       ch.assertQueue('', { exclusive: true }, function (err, q) {
 
@@ -52,7 +52,7 @@ app.post('/speak', function (req, res) {
 
   amqp.connect('amqp://localhost', function (err, conn) {
     conn.createChannel(function (err, ch) {
-      var ex = 'hw3';
+      var ex = 'kim';
       ch.publish(ex, key, new Buffer(msg));
 
       //for some reason, if we delete the line below, it doesn't work

@@ -3,9 +3,9 @@
 
 ## Introduction
  Simple RESTful message queuing app using NodeJS and RabbitMQ.
- When messages are sent with keys, app creates to an exclusive queue, binds it to an direct exchange "hw3" with all provided keys.
+ When messages are sent with keys, app creates to an exclusive queue, binds it to an direct exchange "kim" with all provided keys.
 
- > The routing algorithm behind a direct exchange is simple - a message goes to the queues whose binding key exactly matches the routing key of the message. - from RabbitMQ website
+ > The routing algorithm behind a direct exchange is simple - a message goes to the queues whose binding key exactly matches the routing key of the message.
 
 
 ## REST API 
